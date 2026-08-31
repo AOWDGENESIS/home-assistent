@@ -8,14 +8,14 @@ automation:
     action:
       - service: light.turn_on
         target:
-          entity_id: light.livingroom
+          entity_id: light.wohnzimmer
 
   - alias: Temperaturwarnung
     trigger:
       - platform: numeric_state
-        entity_id: sensor.temperature
+        entity_id: sensor.temp
         above: 28
     action:
-      - service: notify.mobile_app
+      - service: notify.notify
         data:
-          message: "Achtung! Die Temperatur ist über 28°C gestiegen."
+          message: "Temperatur über 28°C!"
