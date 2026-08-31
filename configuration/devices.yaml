@@ -1,0 +1,14 @@
+# Geräte-Definitionen für Home Assistant
+
+devices:
+  - name: Wohnzimmer Lampe
+    id: light.livingroom
+    type: light
+
+  - name: Schlafzimmer Lampe
+    id: light.bedroom
+    type: light
+
+  - name: Temperatur Sensor
+    id: sensor.temperature
+    type: sensor
