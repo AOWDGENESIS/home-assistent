@@ -49,3 +49,12 @@ cargo run -p ur-cli -- scan-image .\tests\fixtures\sample.img
 die lokale Installation. `scan-image` akzeptiert ausschließlich eine reguläre
 Datei und führt einen konservativen Header-Scan durch; physische Datenträger
 werden von diesem Befehl nicht geöffnet.
+
+## Paket und Installation
+
+Das reproduzierbare Paket liegt nach `.\installer\package.ps1` unter
+`dist\UniversalRecovery-0.1.0-source.zip`. Die deutsche Anleitung befindet
+sich im Paket unter `installer\README_DE.txt`. Ein echtes ausführbares
+Release wird nur durch `installer\build.ps1` erzeugt, nachdem die MSVC-
+Buildtools vorhanden sind; `installer\install.ps1` verweigert die Installation
+ohne zuvor geprüfte Release-Binary.
