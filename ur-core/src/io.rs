@@ -55,13 +55,13 @@ impl DeviceReader for ImageReader {
     async fn read_sector(&self, sector: u64, count: u32) -> Result<Vec<u8>> {
         let bytes = u64::from(self.block_size)
             .checked_mul(u64::from(count))
-            .ok_or_else(|| RecoveryError::FileTooLarge { size: u64::MAX })?;
+            .ok_or(RecoveryError::FileTooLarge { size: u64::MAX })?;
         let offset = sector
             .checked_mul(u64::from(self.block_size))
-            .ok_or_else(|| RecoveryError::SectorUnreadable { sector })?;
+            .ok_or(RecoveryError::SectorUnreadable { sector })?;
         let end = offset
             .checked_add(bytes)
-            .ok_or_else(|| RecoveryError::SectorUnreadable { sector })?;
+            .ok_or(RecoveryError::SectorUnreadable { sector })?;
         if end > self.size {
             return Err(RecoveryError::SectorUnreadable { sector });
         }
