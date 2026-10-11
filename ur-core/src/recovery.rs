@@ -77,40 +77,40 @@ pub fn validate_confidence(confidence: f32) -> Result<()> {
     } else {
         Err(crate::RecoveryError::LowConfidence { confidence })
     }
+}
 
-    /// Return all known signatures found in a buffer.
-    pub fn detect_signatures(data: &[u8]) -> Vec<(FileSignature, usize)> {
-        SIGNATURES
-            .iter()
-            .filter_map(|signature| {
-                find_signature(data, signature.header).map(|offset| (*signature, offset))
-            })
-            .collect()
-    }
+/// Return all known signatures found in a buffer.
+pub fn detect_signatures(data: &[u8]) -> Vec<(FileSignature, usize)> {
+    SIGNATURES
+        .iter()
+        .filter_map(|signature| {
+            find_signature(data, signature.header).map(|offset| (*signature, offset))
+        })
+        .collect()
+}
 
-    /// Scan a buffer and return one catalog entry per detected header.
-    pub fn carve_headers(data: &[u8]) -> Vec<FileEntry> {
-        detect_signatures(data)
-            .into_iter()
-            .enumerate()
-            .map(|(index, (signature, offset))| {
-                let mut entry = FileEntry::new(
-                    std::path::PathBuf::from(format!("carved_{index:05}.{}", signature.name)),
-                    (data.len() - offset) as u64,
-                    crate::FilesystemType::Unknown,
-                    offset as u64,
-                );
-                entry.mime_type = signature.mime_type.to_string();
-                entry.recovery_status = crate::models::RecoveryStatus::Carved;
-                entry.recovery_confidence = 0.75;
-                entry.recovery_details = Some(crate::models::RecoveryDetails {
-                    method: "signature_header".to_string(),
-                    sectors_recovered: 0,
-                    sectors_missing: 0,
-                    confidence: 0.75,
-                });
-                entry
-            })
-            .collect()
-    }
+/// Scan a buffer and return one catalog entry per detected header.
+pub fn carve_headers(data: &[u8]) -> Vec<FileEntry> {
+    detect_signatures(data)
+        .into_iter()
+        .enumerate()
+        .map(|(index, (signature, offset))| {
+            let mut entry = FileEntry::new(
+                std::path::PathBuf::from(format!("carved_{index:05}.{}", signature.name)),
+                (data.len() - offset) as u64,
+                crate::FilesystemType::Unknown,
+                offset as u64,
+            );
+            entry.mime_type = signature.mime_type.to_string();
+            entry.recovery_status = crate::models::RecoveryStatus::Carved;
+            entry.recovery_confidence = 0.75;
+            entry.recovery_details = Some(crate::models::RecoveryDetails {
+                method: "signature_header".to_string(),
+                sectors_recovered: 0,
+                sectors_missing: 0,
+                confidence: 0.75,
+            });
+            entry
+        })
+        .collect()
 }
