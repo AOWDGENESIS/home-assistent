@@ -77,8 +77,9 @@ pub fn validate_confidence(confidence: f32) -> Result<()> {
     } else {
         Err(crate::RecoveryError::LowConfidence { confidence })
     }
+}
 
-    /// Return all known signatures found in a buffer.
+/// Return all known signatures found in a buffer.
     pub fn detect_signatures(data: &[u8]) -> Vec<(FileSignature, usize)> {
         SIGNATURES
             .iter()
@@ -113,4 +114,3 @@ pub fn validate_confidence(confidence: f32) -> Result<()> {
             })
             .collect()
     }
-}
